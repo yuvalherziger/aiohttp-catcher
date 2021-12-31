@@ -1,9 +1,13 @@
 [tool.poetry]
 name = "aiohttp-catcher"
-version = "0.1.0-rc.0"
+version = "0.1.0"
 description = "A centralized error handler for aiohttp servers"
 authors = ["Yuvi Herziger <yherziger@immuta.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/yuvalherziger/aiohttp-catcher"
+repository = "https://github.com/yuvalherziger/aiohttp-catcher"
+keywords = ["python", "python3", "aiohttp", "error-handling"]
 
 [tool.poetry.dependencies]
 python = "^3.8"

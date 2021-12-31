@@ -8,14 +8,11 @@ PYLINT = $(POETRY_RUN) pylint
 PYTEST = $(POETRY_RUN) pytest
 BANDIT = $(POETRY_RUN) bandit
 PYTEST_TESTS := tests
-CI_TARGETS := lint test
+CI_TARGETS := pybandit pylint test
 
 
 .PHONY: ci
 ci: $(CI_TARGETS)
-
-.PHONY: lint
-lint: lint/py
 
 .PHONY: test
 test: test/py
