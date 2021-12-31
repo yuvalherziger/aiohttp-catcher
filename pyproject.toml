@@ -2,7 +2,7 @@
 name = "aiohttp-catcher"
 version = "0.2.0"
 description = "A centralized error handler for aiohttp servers"
-authors = ["Yuvi Herziger <yherziger@immuta.com>"]
+authors = ["Yuval Herziger <yuvalhrz@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/yuvalherziger/aiohttp-catcher"
@@ -29,11 +29,12 @@ build-backend = "poetry.core.masonry.api"
 [tool.pylint.BASIC]
 good-names=[
     "e",
+    "f"
 ]
 
 [tool.pylint.FORMAT]
 max-line-length=120
-max-args=6
+max-args=7
 
 [tool.pylint.'MESSAGES CONTROL']
 disable=[
