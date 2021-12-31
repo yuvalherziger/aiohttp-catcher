@@ -1,31 +1,45 @@
-from typing import Callable, Dict, List
+from typing import Callable, Dict, Union
+import json
 import logging
 
-from aiohttp.typedefs import Handler, Request
-from aiohttp.web import middleware
+from aiohttp.typedefs import Handler
+from aiohttp.web import json_response, middleware, Request
 
 from aiohttp_catcher.scenario import Scenario
 
 LOGGER = logging.getLogger(__name__)
 
 
+
+async def get_full_class_name(cls: type) -> str:
+    return f"{cls.__module__}.{cls.__name__}"
+
+
 class Catcher:
-    scenarios: List[Scenario] = []
-    scenario_map: Dict
-    envelope = "message"
-    code = "code"
+    scenario_map: Dict = {}
+    envelope: str
+    code: str
 
-    def __init__(self, scenarios: List[Scenario] = None, envelope: str = "message", code: str = "code"):
-        pass
+    def __init__(self, envelope: str = "message", code: str = "code", encoder: Callable = json.dumps):
+        self.envelope = envelope
+        self.code = code
+        self.encoder = encoder
 
-    def register_scenario(self, scenario: Scenario):
+    async def add_scenario(self, scenario: Union[Scenario, Dict]):
+        if isinstance(scenario, Dict):
+            scenario = Scenario(**scenario)
+
         exceptions = scenario.exceptions
         for exc in exceptions:
-            exc_module = f"{exc.__module__}.{Exception.__name__}"
+            exc_module = await get_full_class_name(exc)
             if exc_module in self.scenario_map:
-                LOGGER.warning("A new handler for <%s> has been registered.  It will override existing handlers",
+                LOGGER.warning("A new handler for <%s> has been registered. It will override existing handlers",
                                exc_module)
             self.scenario_map[exc_module] = scenario
+
+    async def add_scenarios(self, *scenarios: Union[Scenario, Dict]):
+        for scenario in scenarios:
+            await self.add_scenario(scenario)
 
     @property
     def middleware(self) -> Callable:
@@ -35,9 +49,17 @@ class Catcher:
             try:
                 return await handler(request)
             except Exception as exc:
-                exc_module = f"{exc.__class__.__module__}.{exc.__class__.__name__}"
+                exc_module = await get_full_class_name(exc.__class__)
                 if exc_module in self.scenario_map:
-                    # TODO: implement handler
-                    pass
-
+                    scenario: Scenario = self.scenario_map[exc_module]
+                    data = {
+                        self.envelope: await scenario.get_response_message(exc),
+                        self.code: scenario.status_code,
+                    }
+                    return json_response(
+                        data=data,
+                        status=scenario.status_code,
+                        dumps=self.encoder
+                    )
+                raise
         return catcher_middleware

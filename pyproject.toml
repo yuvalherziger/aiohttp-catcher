@@ -8,10 +8,30 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.8"
 aiohttp = "^3.8.1"
-asyncio = "^3.4.3"
 
 [tool.poetry.dev-dependencies]
+bandit = "^1.7.0"
+dicttoxml = "^1.7.4"
+pylint = "^2.5"
+pytest = "^5.3"
+pytest-aiohttp = "^0.3.0"
+pytest-cov = "^2.10"
+pytest-mock = "^3.6.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.BASIC]
+good-names=[
+    "e",
+]
+
+[tool.pylint.FORMAT]
+max-line-length=120
+max-args=6
+
+[tool.pylint.'MESSAGES CONTROL']
+disable=[
+    "missing-docstring",
+]
