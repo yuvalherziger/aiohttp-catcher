@@ -7,7 +7,7 @@ class AppClientError(Exception):
 
 
 class EntityNotFound(AppClientError):
-    pass
+    error_code = "ENTITY_NOT_FOUND"
 
 
 class Forbidden(AppClientError):

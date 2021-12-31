@@ -203,7 +203,7 @@ class TestCatcher:
         assert "Out of bound: range object index out of range" == (await resp.json()).get("message")
 
     @staticmethod
-    async def test_return_constant_message(aiohttp_client, routes, loop):
+    async def test_default_to_500(aiohttp_client, routes, loop):
         catcher = Catcher()
         app = web.Application(middlewares=[catcher.middleware])
         app.add_routes(routes)
@@ -215,3 +215,55 @@ class TestCatcher:
 
         resp = await client.get("/divide?a=Foo")
         assert 500 == resp.status
+        assert "Internal server error" == (await resp.json()).get("message")
+
+    @staticmethod
+    async def test_additional_fields_from_dictionary(aiohttp_client, routes, loop):
+        catcher = Catcher()
+        await catcher.add_scenario(
+            catch(EntityNotFound).with_status_code(404).and_stringify().with_additional_fields({"error_code": "ENTITY_NOT_FOUND"})
+        )
+        app = web.Application(middlewares=[catcher.middleware])
+        app.add_routes(routes)
+
+        client = await aiohttp_client(app)
+        resp = await client.get("/user/1009")
+        assert 404 == resp.status
+        assert "User ID 1009 could not be found" == (await resp.json()).get("message")
+        assert "ENTITY_NOT_FOUND" == (await resp.json()).get("error_code")
+
+    @staticmethod
+    async def test_additional_fields_from_callable(aiohttp_client, routes, loop):
+        catcher = Catcher()
+        await catcher.add_scenario(
+            catch(EntityNotFound).with_status_code(404).and_stringify().with_additional_fields(lambda e: {"error_code": e.error_code})
+        )
+        app = web.Application(middlewares=[catcher.middleware])
+        app.add_routes(routes)
+
+        client = await aiohttp_client(app)
+        resp = await client.get("/user/1009")
+        assert 404 == resp.status
+        assert "User ID 1009 could not be found" == (await resp.json()).get("message")
+        assert "ENTITY_NOT_FOUND" == (await resp.json()).get("error_code")
+
+    @staticmethod
+    async def test_additional_fields_from_awaitable(aiohttp_client, routes, loop):
+        catcher = Catcher()
+
+        async def get_additional_fields(e: Exception):
+            return {"error_code": e.error_code, "foo": "bar"}
+
+        await catcher.add_scenario(
+            catch(EntityNotFound).with_status_code(404).and_stringify().with_additional_fields(get_additional_fields)
+        )
+        app = web.Application(middlewares=[catcher.middleware])
+        app.add_routes(routes)
+
+        client = await aiohttp_client(app)
+        resp = await client.get("/user/1009")
+        assert 404 == resp.status
+        assert "User ID 1009 could not be found" == (await resp.json()).get("message")
+        body = await resp.json()
+        assert "ENTITY_NOT_FOUND" == body.get("error_code")
+        assert "bar" == body.get("foo")

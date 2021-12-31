@@ -50,16 +50,21 @@ class Catcher:
                 return await handler(request)
             except Exception as exc:
                 exc_module = await get_full_class_name(exc.__class__)
+                scenario: Scenario
                 if exc_module in self.scenario_map:
-                    scenario: Scenario = self.scenario_map[exc_module]
-                    data = {
-                        self.envelope: await scenario.get_response_message(exc),
-                        self.code: scenario.status_code,
-                    }
-                    return json_response(
-                        data=data,
-                        status=scenario.status_code,
-                        dumps=self.encoder
-                    )
-                raise
+                    scenario = self.scenario_map[exc_module]
+                else:
+                    LOGGER.exception("aiohttp-catcher caught an unhandled exception")
+                    scenario = Scenario(exceptions=[type(exc)])
+                additional_fields: Dict = await scenario.get_additional_fields(exc)
+                data = {
+                    self.envelope: await scenario.get_response_message(exc),
+                    self.code: scenario.status_code,
+                    **additional_fields
+                }
+                return json_response(
+                    data=data,
+                    status=scenario.status_code,
+                    dumps=self.encoder
+                )
         return catcher_middleware
