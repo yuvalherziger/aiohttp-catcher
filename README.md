@@ -19,6 +19,8 @@ will be handled however you want them to.
   * [Callables and Awaitables](#callables-and-awaitables)
   * [Handle Several Exceptions Similarly](#handle-several-exceptions-similarly)
   * [Scenarios as Dictionaries](#scenarios-as-dictionaries)
+  * [Additional Fields](#additional-fields)
+  * [Default for Unhandled Exceptions](#default-for-unhandled-exceptions)
 - [Development](#development)
 
 ***
@@ -29,9 +31,9 @@ will be handled however you want them to.
 from aiohttp import web
 from aiohttp_catcher import catch, Catcher
 
-async def hello(request):
-    division = 1 / 0
-    return web.Response(text=f"1 / 0 = {division}")
+async def divide(request):
+    quotient = 1 / 0
+    return web.Response(text=f"1 / 0 = {quotient}")
 
 
 async def main():
@@ -45,7 +47,7 @@ async def main():
 
     # Register your catcher as an aiohttp middleware:
     app = web.Application(middlewares=[catcher.middleware])
-    app.add_routes([web.get("/divide-by-zero", hello)])
+    app.add_routes([web.get("/divide-by-zero", divide)])
     web.run_app(app)
 ```
 
@@ -61,7 +63,7 @@ Making a request to `/divide-by-zero` will return a 400 status code with the fol
 ### Return a Constant
 
 In case you want some exceptions to return a constant message across your application, you can do
-so by using the `.and_return("some value")` method:
+so by using the `and_return("some value")` method:
 
 ```python
 await catcher.add_scenario(
@@ -76,7 +78,7 @@ await catcher.add_scenario(
 In some cases, you would want to return a stringified version of your exception, should it entail
 user-friendly information.
 
-```
+```python
 class EntityNotFound(Exception):
     def __init__(self, entity_id, *args, **kwargs):
         super(EntityNotFound, self).__init__(*args, **kwargs)
@@ -164,6 +166,38 @@ await catcher.add_scenarios(
 
 ***
 
+### Additional Fields
+
+You can enrich your error responses with additional fields. You can provide additional fields using
+literal dictionaries or with callables.  Callables will be called with the exception object as their
+only argument.
+
+
+```python
+# Using a literal dictionary:
+await catcher.add_scenario(
+    catch(EntityNotFound).with_status_code(404).and_stringify().with_additional_fields({"error_code": "ENTITY_NOT_FOUND"})
+)
+
+# Using a function (or an async function):
+await catcher.add_scenario(
+    catch(EntityNotFound).with_status_code(404).and_stringify().with_additional_fields(lambda e: {"error_code": e.error_code})
+)
+```
+
+***
+
+### Default for Unhandled Exceptions
+
+Exceptions that aren't registered with scenarios in your `Catcher` will default to 500, with a payload similar to
+the following:
+
+```json
+{"code": 500, "message": "Internal server error"}
+```
+
+***
+
 ## Development
 
 Contributions are warmly welcomed.  Before submitting your PR, please run the tests using the following Make target:
@@ -172,22 +206,22 @@ Contributions are warmly welcomed.  Before submitting your PR, please run the te
 make ci
 ```
 
-Alternatively, you can run each test suite separately:
+Alternatively, you can run each test separately:
 
-1. Unit tests:
+Unit tests:
 
-   ```bash
-   make test/py
-   ```
+```bash
+make test/py
+```
 
-2. Linting with pylint:
+Linting with pylint:
 
-   ```bash
-   make pylint
-   ```
+```bash
+make pylint
+```
 
-3. Static security checks with bandit:
+Static security checks with bandit:
 
-   ```bash
-   make pybandit
-   ```
+```bash
+make pybandit
+```
