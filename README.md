@@ -8,7 +8,7 @@
 
 aiohttp-catcher is a centralized error handler for [aiohttp servers](https://docs.aiohttp.org/en/stable/web.html).
 It enables consistant error handlling across your web server or API, so your code can raise Python exceptions that
-will be handled however you want them to.
+will be mapped to user-friendly error messages.
 
 ***
 
