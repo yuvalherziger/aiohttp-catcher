@@ -1,5 +1,7 @@
-from typing import Any, Awaitable, Callable, Dict, List, Union
+from typing import Any, Awaitable, Callable, Dict, List, Type, Union
 from inspect import isawaitable, iscoroutine, iscoroutinefunction
+
+from aiohttp.web import Request
 
 
 def is_async(f):
@@ -12,8 +14,8 @@ class Scenario:
     stringify_exception: bool = False
     additional_fields: Union[Dict, Callable, Awaitable] = None
 
-    def __init__(self, exceptions: List[type[Exception]], func: Union[Callable, Awaitable] = None, constant: Any = "Internal server error",
-                 stringify_exception: bool = False, status_code: int = 500,
+    def __init__(self, exceptions: List[Type[Exception]], func: Union[Callable, Awaitable] = None,
+                 constant: Any = "Internal server error", stringify_exception: bool = False, status_code: int = 500,
                  additional_fields: Union[Dict, Callable, Awaitable] = None):
         self.exceptions = exceptions
         self.stringify_exception = stringify_exception
@@ -25,11 +27,11 @@ class Scenario:
                 self.is_callable = True
         self.status_code = status_code
 
-    async def get_response_message(self, exc: Exception) -> Any:
+    async def get_response_message(self, exc: Exception, request: Request) -> Any:
         if self.is_callable:
             if is_async(self.func):
-                return await self.func(exc)
-            return self.func(exc)
+                return await self.func(exc, request)
+            return self.func(exc, request)
         if self.stringify_exception:
             return str(exc)
         return self.constant
@@ -65,5 +67,5 @@ class Scenario:
         return self
 
 
-def catch(*exceptions: type[Exception]) -> Scenario:
+def catch(*exceptions: Type[Exception]) -> Scenario:
     return Scenario(exceptions=list(exceptions))

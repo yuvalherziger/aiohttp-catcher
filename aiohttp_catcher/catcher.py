@@ -57,7 +57,7 @@ class Catcher:
                     scenario = Scenario(exceptions=[type(exc)])
                 additional_fields: Dict = await scenario.get_additional_fields(exc)
                 data = {
-                    self.envelope: await scenario.get_response_message(exc=exc),
+                    self.envelope: await scenario.get_response_message(exc=exc, request=request),
                     self.code: scenario.status_code,
                     **additional_fields
                 }

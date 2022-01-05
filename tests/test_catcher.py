@@ -108,7 +108,7 @@ class TestCatcher:
     async def test_invoke_callable(aiohttp_client, routes, loop):
         catcher = Catcher()
         await catcher.add_scenario(
-            catch(IndexError).with_status_code(418).and_call(lambda exc: f"Out of bound: {str(exc)}")
+            catch(IndexError).with_status_code(418).and_call(lambda exc, req: f"Out of bound: {str(exc)}")
         )
 
         app = web.Application(middlewares=[catcher.middleware])
@@ -127,7 +127,7 @@ class TestCatcher:
     async def test_invoke_awaitable(aiohttp_client, routes, loop):
         catcher = Catcher()
 
-        async def async_callable(exc):
+        async def async_callable(exc, req):
             return f"Out of bound: {str(exc)}"
 
         await catcher.add_scenario(
@@ -162,7 +162,7 @@ class TestCatcher:
             },
             {
                 "exceptions": [IndexError],
-                "func": lambda exc: f"Out of bound: {str(exc)}",
+                "func": lambda exc, req: f"Out of bound: {str(exc)}. Request URL: {req.rel_url}",
                 "status_code": 418,
             },
         )
@@ -181,7 +181,8 @@ class TestCatcher:
 
         resp = await client.get("/get-element-n?n=100")
         assert 418 == resp.status
-        assert "Out of bound: range object index out of range" == (await resp.json()).get("message")
+        assert "Out of bound: range object index out of range. Request URL: /get-element-n?n=100" \
+               == (await resp.json()).get("message")
 
     @staticmethod
     async def test_default_to_500(aiohttp_client, routes, loop):
