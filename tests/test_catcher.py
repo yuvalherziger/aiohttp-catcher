@@ -2,6 +2,7 @@ from aiohttp import web
 
 from aiohttp.web import Request
 from aiohttp_catcher import catch, Catcher
+from aiohttp_catcher.canned import aiohttp_scenarios
 from conftest import AppClientError, EntityNotFound
 from dicttoxml import dicttoxml
 
@@ -260,3 +261,19 @@ class TestCatcher:
         body = await resp.json()
         assert "ENTITY_NOT_FOUND" == body.get("error_code")
         assert "bar" == body.get("foo")
+
+    @staticmethod
+    async def test_canned_aiohttp(aiohttp_client, routes, loop):
+        catcher = Catcher()
+        await catcher.add_scenarios(*aiohttp_scenarios)
+        app = web.Application(middlewares=[catcher.middleware])
+        app.add_routes(routes)
+
+        client = await aiohttp_client(app)
+        resp = await client.get("/i-dont-exist")
+        assert 404 == resp.status
+        assert {"message": "HTTPNotFound", "code": 404} == await resp.json()
+
+        resp = await client.delete("/user/1009")
+        assert 405 == resp.status
+        assert {"message": "HTTPMethodNotAllowed", "code": 405} == await resp.json()
