@@ -12,7 +12,7 @@ class Scenario:
     stringify_exception: bool = False
     additional_fields: Union[Dict, Callable, Awaitable] = None
 
-    def __init__(self, exceptions: List[Exception], func: Union[Callable, Awaitable] = None, constant: Any = "Internal server error",
+    def __init__(self, exceptions: List[type[Exception]], func: Union[Callable, Awaitable] = None, constant: Any = "Internal server error",
                  stringify_exception: bool = False, status_code: int = 500,
                  additional_fields: Union[Dict, Callable, Awaitable] = None):
         self.exceptions = exceptions
@@ -65,5 +65,5 @@ class Scenario:
         return self
 
 
-def catch(*exceptions: Exception) -> Scenario:
+def catch(*exceptions: type[Exception]) -> Scenario:
     return Scenario(exceptions=list(exceptions))

@@ -10,7 +10,6 @@ from aiohttp_catcher.scenario import Scenario
 LOGGER = logging.getLogger(__name__)
 
 
-
 async def get_full_class_name(cls: type) -> str:
     return f"{cls.__module__}.{cls.__name__}"
 
@@ -58,7 +57,7 @@ class Catcher:
                     scenario = Scenario(exceptions=[type(exc)])
                 additional_fields: Dict = await scenario.get_additional_fields(exc)
                 data = {
-                    self.envelope: await scenario.get_response_message(exc),
+                    self.envelope: await scenario.get_response_message(exc=exc),
                     self.code: scenario.status_code,
                     **additional_fields
                 }
