@@ -36,14 +36,14 @@ class Scenario:
             return str(exc)
         return self.constant
 
-    async def get_additional_fields(self, exc: Exception) -> Dict:
+    async def get_additional_fields(self, exc: Exception, req: Request) -> Dict:
         if not self.additional_fields:
             return {}
         if isinstance(self.additional_fields, Dict):
             return self.additional_fields
         if is_async(self.additional_fields):
-            return await self.additional_fields(exc)
-        return self.additional_fields(exc)
+            return await self.additional_fields(exc, req)
+        return self.additional_fields(exc, req)
 
     def with_status_code(self, status_code) -> "Scenario":
         self.status_code = status_code

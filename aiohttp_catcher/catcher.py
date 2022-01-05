@@ -55,7 +55,7 @@ class Catcher:
                 else:
                     LOGGER.exception("aiohttp-catcher caught an unhandled exception")
                     scenario = Scenario(exceptions=[type(exc)])
-                additional_fields: Dict = await scenario.get_additional_fields(exc)
+                additional_fields: Dict = await scenario.get_additional_fields(exc=exc, req=request)
                 data = {
                     self.envelope: await scenario.get_response_message(exc=exc, request=request),
                     self.code: scenario.status_code,

@@ -1,5 +1,6 @@
 from aiohttp import web
 
+from aiohttp.web import Request
 from aiohttp_catcher import catch, Catcher
 from conftest import AppClientError, EntityNotFound
 from dicttoxml import dicttoxml
@@ -32,7 +33,9 @@ class TestCatcher:
         expected_code = 418
         catcher = Catcher()
         await catcher.add_scenario(
-            catch(ZeroDivisionError, EntityNotFound, IndexError).with_status_code(expected_code).and_return(expected_message)
+            catch(ZeroDivisionError, EntityNotFound, IndexError).with_status_code(expected_code).and_return(
+                expected_message
+            )
         )
         app = web.Application(middlewares=[catcher.middleware])
         app.add_routes(routes)
@@ -218,7 +221,13 @@ class TestCatcher:
     async def test_additional_fields_from_callable(aiohttp_client, routes, loop):
         catcher = Catcher()
         await catcher.add_scenario(
-            catch(EntityNotFound).with_status_code(404).and_stringify().with_additional_fields(lambda e: {"error_code": e.error_code})
+            catch(EntityNotFound).with_status_code(404).and_stringify().with_additional_fields(
+                lambda e, r: {
+                    "error_code": e.error_code,
+                    "endpoint": str(r.rel_url),
+                    "method": r.method,
+                }
+            )
         )
         app = web.Application(middlewares=[catcher.middleware])
         app.add_routes(routes)
@@ -228,12 +237,14 @@ class TestCatcher:
         assert 404 == resp.status
         assert "User ID 1009 could not be found" == (await resp.json()).get("message")
         assert "ENTITY_NOT_FOUND" == (await resp.json()).get("error_code")
+        assert "/user/1009" == (await resp.json()).get("endpoint")
+        assert "GET" == (await resp.json()).get("method")
 
     @staticmethod
     async def test_additional_fields_from_awaitable(aiohttp_client, routes, loop):
         catcher = Catcher()
 
-        async def get_additional_fields(e: Exception):
+        async def get_additional_fields(e: Exception, r: Request):
             return {"error_code": e.error_code, "foo": "bar"}
 
         await catcher.add_scenario(
