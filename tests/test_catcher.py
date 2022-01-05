@@ -86,25 +86,6 @@ class TestCatcher:
         assert "User ID 1009 could not be found" == (await resp.json()).get("message")
 
     @staticmethod
-    async def test_invoke_blocking_callable(aiohttp_client, routes, loop):
-        catcher = Catcher()
-        await catcher.add_scenario(
-            catch(EntityNotFound).with_status_code(404).and_stringify()
-        )
-
-        app = web.Application(middlewares=[catcher.middleware])
-        app.add_routes(routes)
-
-        client = await aiohttp_client(app)
-        resp = await client.get("/user/1001")
-        assert 200 == resp.status
-        assert "Jayne Doe" == (await resp.json()).get("name")
-
-        resp = await client.get("/user/1009")
-        assert 404 == resp.status
-        assert "User ID 1009 could not be found" == (await resp.json()).get("message")
-
-    @staticmethod
     async def test_catch_parent_exception(aiohttp_client, routes, loop):
         catcher = Catcher()
         await catcher.add_scenario(
