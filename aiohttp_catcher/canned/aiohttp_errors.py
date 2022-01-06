@@ -1,3 +1,5 @@
+from typing import Optional
+
 from aiohttp.web import Request
 from aiohttp.web_exceptions import (
     HTTPError, HTTPBadRequest, HTTPUnauthorized, HTTPPaymentRequired, HTTPForbidden, HTTPNotFound,
@@ -13,7 +15,8 @@ from aiohttp.web_exceptions import (
 from aiohttp_catcher import catch
 
 
-async def get_aiohttp_error_message(exc: HTTPError, request: Request) -> str:
+async def get_aiohttp_error_message(exc: HTTPError,
+                                    request: Optional[Request] = None) -> str:  # pylint: disable=unused-argument
     return exc.__class__.__name__
 
 
