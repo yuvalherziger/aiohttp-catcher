@@ -2,7 +2,7 @@ from aiohttp import web
 
 from aiohttp.web import Request
 from aiohttp_catcher import catch, Catcher
-from aiohttp_catcher.canned import aiohttp_scenarios
+from aiohttp_catcher.canned import AIOHTTP_SCENARIOS
 from conftest import AppClientError, EntityNotFound
 from dicttoxml import dicttoxml
 
@@ -265,7 +265,7 @@ class TestCatcher:
     @staticmethod
     async def test_canned_aiohttp(aiohttp_client, routes, loop):
         catcher = Catcher()
-        await catcher.add_scenarios(*aiohttp_scenarios)
+        await catcher.add_scenarios(*AIOHTTP_SCENARIOS)
         app = web.Application(middlewares=[catcher.middleware])
         app.add_routes(routes)
 

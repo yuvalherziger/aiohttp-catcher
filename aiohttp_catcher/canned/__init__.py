@@ -1,4 +1,4 @@
-from aiohttp_catcher.canned.aiohttp_errors import scenarios as aiohttp_scenarios
+from aiohttp_catcher.canned.aiohttp_errors import SCENARIOS as AIOHTTP_SCENARIOS
 
 
-__all__ = ["aiohttp_scenarios"]
+__all__ = ["AIOHTTP_SCENARIOS"]

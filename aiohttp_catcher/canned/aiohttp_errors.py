@@ -20,7 +20,7 @@ async def get_aiohttp_error_message(exc: HTTPError,
     return exc.__class__.__name__
 
 
-scenarios = [
+SCENARIOS = [
     catch(HTTPBadRequest).with_status_code(400).and_call(get_aiohttp_error_message),
     catch(HTTPUnauthorized).with_status_code(401).and_call(get_aiohttp_error_message),
     catch(HTTPPaymentRequired).with_status_code(402).and_call(get_aiohttp_error_message),
