@@ -30,12 +30,23 @@ python-versions = ">=3.6"
 frozenlist = ">=1.1.0"
 
 [[package]]
+name = "anybadge"
+version = "1.8.0"
+description = "Simple, flexible badge generator for project badges."
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+packaging = "*"
+
+[[package]]
 name = "astroid"
-version = "2.9.0"
+version = "2.9.2"
 description = "An abstract syntax tree for Python with inference support."
 category = "dev"
 optional = false
-python-versions = "~=3.6"
+python-versions = ">=3.6.2"
 
 [package.dependencies]
 lazy-object-proxy = ">=1.4.0"
@@ -88,7 +99,7 @@ stevedore = ">=1.20.0"
 
 [[package]]
 name = "charset-normalizer"
-version = "2.0.9"
+version = "2.0.10"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
 category = "main"
 optional = false
@@ -145,7 +156,7 @@ smmap = ">=3.0.1,<6"
 
 [[package]]
 name = "gitpython"
-version = "3.1.24"
+version = "3.1.25"
 description = "GitPython is a python library used to interact with Git repositories"
 category = "dev"
 optional = false
@@ -153,7 +164,6 @@ python-versions = ">=3.7"
 
 [package.dependencies]
 gitdb = ">=4.0.1,<5"
-typing-extensions = {version = ">=3.7.4.3", markers = "python_version < \"3.10\""}
 
 [[package]]
 name = "idna"
@@ -425,7 +435,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "595f23ca0e8647333a8f25ba3a4cfef3f56aebbbe3ed7723c3c7418fa11e87f9"
+content-hash = "2ded3336d9743c2017d330d9d9de952fcdd7473f0e079b89529109e305e53ede"
 
 [metadata.files]
 aiohttp = [
@@ -506,9 +516,13 @@ aiosignal = [
     {file = "aiosignal-1.2.0-py3-none-any.whl", hash = "sha256:26e62109036cd181df6e6ad646f91f0dcfd05fe16d0cb924138ff2ab75d64e3a"},
     {file = "aiosignal-1.2.0.tar.gz", hash = "sha256:78ed67db6c7b7ced4f98e495e572106d5c432a93e1ddd1bf475e1dc05f5b7df2"},
 ]
+anybadge = [
+    {file = "anybadge-1.8.0-py2.py3-none-any.whl", hash = "sha256:32edfb2e973ffc3ea7a8128610dbce8eace934b906a695b881e2fc23bb534842"},
+    {file = "anybadge-1.8.0.tar.gz", hash = "sha256:736cc6f23c1f29f79f6dc434b7fdc131c7a28abe44810d428c6b63d7c504709e"},
+]
 astroid = [
-    {file = "astroid-2.9.0-py3-none-any.whl", hash = "sha256:776ca0b748b4ad69c00bfe0fff38fa2d21c338e12c84aa9715ee0d473c422778"},
-    {file = "astroid-2.9.0.tar.gz", hash = "sha256:5939cf55de24b92bda00345d4d0659d01b3c7dafb5055165c330bc7c568ba273"},
+    {file = "astroid-2.9.2-py3-none-any.whl", hash = "sha256:aa296702f1a5c3102c860de49473aaa90a7f6d221555d5cf2678940a9be32a4e"},
+    {file = "astroid-2.9.2.tar.gz", hash = "sha256:72ace9c3333e274e9248168fc4f3e300da8545af1c303bd69197027f49e2bfff"},
 ]
 async-timeout = [
     {file = "async-timeout-4.0.2.tar.gz", hash = "sha256:2163e1640ddb52b7a8c80d0a67a08587e5d245cc9c553a74a847056bc2976b15"},
@@ -527,8 +541,8 @@ bandit = [
     {file = "bandit-1.7.1.tar.gz", hash = "sha256:a81b00b5436e6880fa8ad6799bc830e02032047713cbb143a12939ac67eb756c"},
 ]
 charset-normalizer = [
-    {file = "charset-normalizer-2.0.9.tar.gz", hash = "sha256:b0b883e8e874edfdece9c28f314e3dd5badf067342e42fb162203335ae61aa2c"},
-    {file = "charset_normalizer-2.0.9-py3-none-any.whl", hash = "sha256:1eecaa09422db5be9e29d7fc65664e6c33bd06f9ced7838578ba40d58bdf3721"},
+    {file = "charset-normalizer-2.0.10.tar.gz", hash = "sha256:876d180e9d7432c5d1dfd4c5d26b72f099d503e8fcc0feb7532c9289be60fcbd"},
+    {file = "charset_normalizer-2.0.10-py3-none-any.whl", hash = "sha256:cb957888737fc0bbcd78e3df769addb41fd1ff8cf950dc9e7ad7793f1bf44455"},
 ]
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
@@ -665,8 +679,8 @@ gitdb = [
     {file = "gitdb-4.0.9.tar.gz", hash = "sha256:bac2fd45c0a1c9cf619e63a90d62bdc63892ef92387424b855792a6cabe789aa"},
 ]
 gitpython = [
-    {file = "GitPython-3.1.24-py3-none-any.whl", hash = "sha256:dc0a7f2f697657acc8d7f89033e8b1ea94dd90356b2983bca89dc8d2ab3cc647"},
-    {file = "GitPython-3.1.24.tar.gz", hash = "sha256:df83fdf5e684fef7c6ee2c02fc68a5ceb7e7e759d08b694088d0cacb4eba59e5"},
+    {file = "GitPython-3.1.25-py3-none-any.whl", hash = "sha256:4f8b0e51713642b83f1eb10136d36a7f2c5278d188c5ae82b144cb1f4e848f0c"},
+    {file = "GitPython-3.1.25.tar.gz", hash = "sha256:b923e8952c2fe0d70b129fddd8511acc90b3070c8dddb20d86ca9911a5d0c248"},
 ]
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
