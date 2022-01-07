@@ -21,5 +21,5 @@ jobs:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install dependencies
         run: poetry install
-      - name: Check security with Bandit
-        run:  poetry run pytest --cov=aiohttp_catcher --cov-report=term tests | grep TOTAL | poetry run scriptes/extract_coverage.py
+      - name: Update coverage badge
+        run:  poetry run pytest --cov=aiohttp_catcher --cov-report=term tests | grep TOTAL | GIST_SECRET="${{ secrets.GIST_SECRET }}" poetry run scriptes/extract_coverage.py
