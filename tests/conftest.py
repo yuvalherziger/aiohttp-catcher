@@ -2,7 +2,6 @@ from aiohttp import web
 import pytest
 
 
-
 class AppClientError(Exception):
     pass
 
