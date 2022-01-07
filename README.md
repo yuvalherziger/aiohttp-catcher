@@ -1,9 +1,12 @@
 # aiohttp-catcher
 
 <div align="left">
-  <a href="https://github.com/yuvalherziger/aiohttp-catcher/actions?query=workflow%3ACI"><img alt="CI Job" src="https://github.com/yuvalherziger/aiohttp-catcher/workflows/CI/badge.svg"></a>
-  <a href="https://pypi.org/project/aiohttp-catcher"><img src="https://badge.fury.io/py/aiohttp-catcher.svg" alt="PyPI version" height="18"></a>
+  <a href="https://github.com/yuvalherziger/aiohttp-catcher/actions?query=workflow%3ACI"><img alt="CI Job"  height="20" src="https://github.com/yuvalherziger/aiohttp-catcher/workflows/CI/badge.svg"></a>
+  <a href="https://pypi.org/project/aiohttp-catcher"><img src="https://badge.fury.io/py/aiohttp-catcher.svg" alt="PyPI version" height="20"></a>
+  <a href=""><img src="https://gist.githubusercontent.com/yuvalherziger/14417a5617e959df89a524f327f86c92/raw/395fe027d00c73a612a117cc81c882d9ad012abc/aiohttp-catcher-cov.svg" height="20"></a>
 </div>
+
+***
 
 aiohttp-catcher is a centralized error handler for [aiohttp servers](https://docs.aiohttp.org/en/stable/web.html).
 It enables consistent error handling across your web server or API, so your code can raise Python exceptions that
