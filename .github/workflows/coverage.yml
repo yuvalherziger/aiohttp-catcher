@@ -22,4 +22,4 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Update coverage badge
-        run:  poetry run pytest --cov=aiohttp_catcher --cov-report=term tests | grep TOTAL | GIST_SECRET="${{ secrets.GIST_SECRET }}" poetry run scriptes/extract_coverage.py
+        run:  poetry run pytest --cov=aiohttp_catcher --cov-report=term tests | grep TOTAL | GIST_SECRET="${{ secrets.GIST_SECRET }}" poetry run scripts/extract_coverage.py
