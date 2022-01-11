@@ -5,6 +5,7 @@
   <a href="https://pypi.org/project/aiohttp-catcher"><img src="https://badge.fury.io/py/aiohttp-catcher.svg" alt="PyPI version" height="20"></a>
   <a href="https://github.com/yuvalherziger/aiohttp-catcher/actions"><img src="https://gist.githubusercontent.com/yuvalherziger/14417a5617e959df89a524f327f86c92/raw/395fe027d00c73a612a117cc81c882d9ad012abc/aiohttp-catcher-cov.svg" height="20"></a>
     <a href="https://github.com/yuvalherziger/aiohttp-catcher/blob/main/LiCENSE"><img src="https://img.shields.io/pypi/l/aiohttp-catcher?label=license" height="20"></a>
+    <a href="https://github.com/yuvalherziger/aiohttp-catcher"><img src="https://img.shields.io/pypi/dm/aiohttp-catcher" height="20"></a>
 </div>
 
 ***
