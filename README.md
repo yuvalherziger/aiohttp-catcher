@@ -29,6 +29,12 @@ will be mapped to consistent, user-friendly error messages.
 
 ***
 
+TL;DR:
+
+![aiohttp-catcher-diagram](img/aiohttp-catcher-diagram.png)
+
+***
+
 ## Quickstart
 
 Install aiohttp-catcher:
