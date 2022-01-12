@@ -76,6 +76,33 @@ Making a request to `/divide-by-zero` will return a 400 status code with the fol
 {"code": 400, "message": "Zero division makes zero sense"}
 ```
 
+<div>
+<h3>
+  <span style="color:#ff6500">IMPORTANT NOTE:</span>
+  <span>aiohttp's order of middleware matters</span>
+</h3>
+</div>
+
+Middlewares that are appended further in the list of your app's middlewares act
+earlier. Consider the following example:
+```python
+app = web.Application(middlewares=[middleware1, middleware2])
+```
+
+In the above case, `middleware2` will be triggered first, and only then
+will `middleware1` be triggered.  This means two things:
+
+1. If you register another middleware that catches exceptions but doesn't raise them
+   when it's done, you will need to add it **before** your _aiohttp-catcher_ middleware
+   or the other middleware will shadow _aiohttp-catcher_.
+2. If you register another middleware that relies on exceptions being raised, you want
+   to make sure it's added **after** your _aiohttp-catcher_ middleware, to avoid having
+   your _aiohttp-catcher_ middleware shadow the other middleware. One good example is
+   [aiohttp-debugtoolbar](https://github.com/aio-libs/aiohttp-debugtoolbar), which, like
+   _aiohttp-catcher_, expects exceptions to be thrown and raises them when its middleware's
+   execution is done. In this case, you want to set up _aiohttp-debugtoolbar_ after appending
+   your _aiohttp-catcher_ middleware.
+
 ***
 
 ## What's New in 0.3.0?
