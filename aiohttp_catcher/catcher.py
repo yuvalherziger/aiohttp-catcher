@@ -32,8 +32,8 @@ class Catcher:
         for exc in exceptions:
             exc_module = await get_full_class_name(exc)
             if exc_module in self.scenario_map:
-                LOGGER.warning("A new handler for <%s> has been registered. It will override existing handlers",
-                               exc_module)
+                LOGGER.debug("A new handler for <%s> has been registered. It will override existing handlers",
+                             exc_module)
             self.scenario_map[exc_module] = scenario
 
     async def add_scenarios(self, *scenarios: Union[Scenario, Dict]):
