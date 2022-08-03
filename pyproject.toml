@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aiohttp-catcher"
-version = "0.3.1"
+version = "0.3.2"
 description = "A centralized error handler for aiohttp servers"
 authors = ["Yuval Herziger <yuvalhrz@gmail.com>"]
 license = "MIT"
